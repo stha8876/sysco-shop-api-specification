@@ -1,0 +1,740 @@
+paths:
+  /api/v1/health/{service}:
+    get:
+      summary: Check health of a service
+      tags:
+        - Health
+      parameters:
+        - name: service
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [auth, product, order, cart]
+      responses:
+        "200": { $ref: "#/components/responses/SuccessResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+
+  /api/v1/auth/register:
+    post:
+      summary: "Register Operation"
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        $ref: "#/components/requestBodies/RegisterRequestBody"
+      responses:
+        "201": { $ref: "#/components/responses/SuccessRegisterResponse" }
+        "400": { $ref: "#/components/responses/BadRequestResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+
+  /api/v1/auth/login:
+    post:
+      summary: "Login Operation"
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        $ref: "#/components/requestBodies/AuthRequestBody"
+      responses:
+        "200":
+          $ref: "#/components/responses/SuccessLoginResponse"
+        "400":
+          $ref: "#/components/responses/BadRequestResponse"
+        "501":
+          $ref: "#/components/responses/ServerErrorResponse"
+
+  /api/v1/auth/refresh:
+    post:
+      summary: "Refresh Token"
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        $ref: "#/components/requestBodies/RefreshTokenRequestBody"
+      responses:
+        "200": { $ref: "#/components/responses/SuccessTokenResponse" }
+        "401": { $ref: "#/components/responses/UnauthorizedResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+
+  /api/v1/auth/change:
+    post:
+      summary: "Change Password"
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        $ref: "#/components/requestBodies/ChangePasswordRequestBody"
+      responses:
+        "200": { $ref: "#/components/responses/SuccessResponse" }
+        "400": { $ref: "#/components/responses/BadRequestResponse" }
+        "401": { $ref: "#/components/responses/UnauthorizedResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+  /api/v1/auth/forgot:
+    post:
+      summary: "Forgot Password"
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        $ref: "#/components/requestBodies/ForgotPasswordRequestBody"
+      responses:
+        "200": { $ref: "#/components/responses/SuccessResponse" }
+        "400": { $ref: "#/components/responses/BadRequestResponse" }
+        "401": { $ref: "#/components/responses/UnauthorizedResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+
+  /api/v1/auth/reset:
+    post:
+      summary: "Reset Password"
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        $ref: "#/components/requestBodies/ResetPasswordRequestBody"
+      responses:
+        "200": { $ref: "#/components/responses/SuccessResponse" }
+        "400": { $ref: "#/components/responses/BadRequestResponse" }
+        "401": { $ref: "#/components/responses/UnauthorizedResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+
+  /api/v1/auth/verify:
+    post:
+      summary: "Verify Email"
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        $ref: "#/components/requestBodies/VerifyEmailRequestBody"
+      responses:
+        "200": { $ref: "#/components/responses/SuccessResponse" }
+        "400": { $ref: "#/components/responses/BadRequestResponse" }
+        "401": { $ref: "#/components/responses/UnauthorizedResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+
+  /api/v1/auth/update:
+    patch:
+      summary: "Update User"
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        $ref: "#/components/requestBodies/UpdateUserRequestBody"
+      responses:
+        "200": { $ref: "#/components/responses/SuccessResponse" }
+        "400": { $ref: "#/components/responses/BadRequestResponse" }
+        "401": { $ref: "#/components/responses/UnauthorizedResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+
+  /api/v1/products:
+    get:
+      summary: Get all products
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      responses:
+        "200": { $ref: "#/components/responses/ProductsListResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+    post:
+      summary: Create a product
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        $ref: "#/components/requestBodies/ProductRequestBody"
+      responses:
+        "201": { $ref: "#/components/responses/CreatedResponse" }
+        "400": { $ref: "#/components/responses/BadRequestResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+
+  /api/v1/products/{productId}:
+    get:
+      summary: Get a product by its ID
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/ProductIdParam"
+      responses:
+        "200": { $ref: "#/components/responses/ProductResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+    put:
+      summary: Update a product
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/ProductIdParam"
+      requestBody:
+        required: true
+        $ref: "#/components/requestBodies/ProductRequestBody"
+      responses:
+        "200": { $ref: "#/components/responses/ProductResponse" }
+        "400": { $ref: "#/components/responses/BadRequestResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+    delete:
+      summary: Delete a product
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/ProductIdParam"
+      responses:
+        "200": { $ref: "#/components/responses/SuccessResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+
+  /api/v1/users:
+    get:
+      summary: Get a list of users
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        "200": { $ref: "#/components/responses/UsersListResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+
+  /api/v1/users/{userId}:
+    get:
+      summary: Get user by ID
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/UserIdParam"
+      responses:
+        "200": { $ref: "#/components/responses/UserResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+
+  /api/v1/orders:
+    get:
+      summary: Get all orders
+      tags:
+        - Orders
+      security:
+        - bearerAuth: []
+      responses:
+        "200": { $ref: "#/components/responses/OrdersListResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+    post:
+      summary: Create an order
+      tags:
+        - Orders
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        $ref: "#/components/requestBodies/OrderRequestBody"
+      responses:
+        "201": { $ref: "#/components/responses/CreatedResponse" }
+        "400": { $ref: "#/components/responses/BadRequestResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+
+  /api/v1/orders/{orderId}:
+    get:
+      summary: Get an order by its ID
+      tags:
+        - Orders
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/OrderIdParam"
+      responses:
+        "200": { $ref: "#/components/responses/OrderResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+    put:
+      summary: Update an order
+      tags:
+        - Orders
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/OrderIdParam"
+      requestBody:
+        required: true
+        $ref: "#/components/requestBodies/OrderRequestBody"
+      responses:
+        "200": { $ref: "#/components/responses/OrderResponse" }
+        "400": { $ref: "#/components/responses/BadRequestResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+    delete:
+      summary: Delete an order
+      tags:
+        - Orders
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/OrderIdParam"
+      responses:
+        "200": { $ref: "#/components/responses/SuccessResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+
+  /api/v1/cart:
+    get:
+      summary: Get cart items
+      tags:
+        - Cart
+      security:
+        - bearerAuth: []
+      responses:
+        "200": { $ref: "#/components/responses/CartItemsListResponse" }
+        "404": { $ref: "#/components/responses/NotFoundResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+    post:
+      summary: Add item to cart
+      tags:
+        - Cart
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        $ref: "#/components/requestBodies/CartItemRequestBody"
+      responses:
+        "201": { $ref: "#/components/responses/CreatedResponse" }
+        "400": { $ref: "#/components/responses/BadRequestResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+
+  /api/v1/files/upload:
+    post:
+      summary: Upload a file
+      tags:
+        - File
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200": { $ref: "#/components/responses/SuccessResponse" }
+        "400": { $ref: "#/components/responses/BadRequestResponse" }
+        "500": { $ref: "#/components/responses/ServerErrorResponse" }
+
+components:
+  parameters:
+    ProductIdParam:
+      name: productId
+      in: path
+      required: true
+      schema:
+        type: integer
+    OrderIdParam:
+      name: orderId
+      in: path
+      required: true
+      schema:
+        type: integer
+    UserIdParam:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: integer
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        isSuccess: { type: boolean }
+        data: { type: object }
+        error: { type: string, nullable: true }
+
+    Token:
+      type: object
+      properties:
+        token: { type: string }
+        refreshToken: { type: string }
+        expiresIn: { type: string, format: date-time }
+
+    User:
+      type: object
+      properties:
+        id: { type: integer }
+        username: { type: string }
+        email: { type: string, format: email }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    Order:
+      type: object
+      properties:
+        id: { type: integer }
+        userId: { type: integer }
+        productId: { type: integer }
+        quantity: { type: integer }
+        total: { type: number }
+        isPaid: { type: boolean }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    Product:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        description: { type: string }
+        availableQuantity: { type: integer }
+        price: { type: number }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    CartItem:
+      type: object
+      properties:
+        id: { type: integer }
+        userId: { type: integer }
+        productId: { type: integer }
+        quantity: { type: integer }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    SuccessResponse:
+      type: object
+      properties:
+        status: { type: string, example: success }
+        data:
+          type: object
+          properties:
+            message: { type: string }
+        message: { type: string, example: Operation successful }
+
+    SuccessTokenResponse:
+      type: object
+      properties:
+        status: { type: string, example: success }
+        data:
+          $ref: "#/components/schemas/Token"
+        message: { type: string, example: Refresh successful }
+
+    SuccessLoginResponse:
+      type: object
+      properties:
+        status: { type: string, example: success }
+        data:
+          type: object
+          properties:
+            token: { type: string }
+            user:
+              $ref: "#/components/schemas/User"
+        message: { type: string, example: Login successful }
+
+    SuccessRegisterResponse:
+      type: object
+      properties:
+        status: { type: string, example: success }
+        data:
+          type: object
+          properties:
+            token: { type: string }
+            user:
+              $ref: "#/components/schemas/User"
+        message: { type: string, example: Registration successful }
+    BadRequestResponse:
+      type: object
+      properties:
+        status: { type: string, example: error }
+        message: { type: string, example: Bad request }
+
+    UpdateUserRequestBody:
+      type: object
+      properties:
+        username: { type: string }
+        profilePicture: { type: string, format: url }
+        nickname: { type: string }
+        bio: { type: string }
+        address: { type: string }
+
+    NotFoundResponse:
+      type: object
+      properties:
+        status: { type: string, example: error }
+        message: { type: string, example: Resource not found }
+
+    ErrorResponse:
+      type: object
+      properties:
+        status: { type: string, example: error }
+        message: { type: string, example: Error occurred }
+
+    DetailedErrorResponse:
+      type: object
+      properties:
+        status: { type: string, example: error }
+        errorDetails:
+          type: object
+          properties:
+            code: { type: integer }
+            message: { type: string }
+        message: { type: string, example: Detailed error message }
+
+  responses:
+    UserResponse:
+      description: User details
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/User"
+
+    SuccessResponse:
+      description: Operation successful
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SuccessResponse"
+
+    NotFoundResponse:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NotFoundResponse"
+
+    ServerErrorResponse:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DetailedErrorResponse"
+
+    CreatedResponse:
+      description: Resource created successfully
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SuccessResponse"
+
+    BadRequestResponse:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BadRequestResponse"
+
+    UnauthorizedResponse:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    ProductsListResponse:
+      description: List of products
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Product"
+
+    ProductResponse:
+      description: Product details
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Product"
+
+    UsersListResponse:
+      description: List of users
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/User"
+    SuccessLoginResponse:
+      description: Login successful
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SuccessLoginResponse"
+    SuccessRegisterResponse:
+      description: Registration successful
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SuccessRegisterResponse"
+    SuccessTokenResponse:
+      description: Refresh successful
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SuccessResponse"
+    CartItemsListResponse:
+      description: List of cart items
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/CartItem"
+    OrdersListResponse:
+      description: List of orders
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Order"
+    CartItemResponse:
+      description: Cart item details
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CartItem"
+    OrderResponse:
+      description: Order details
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Order"
+
+  requestBodies:
+    AuthRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email: { type: string, format: email }
+              password: { type: string, format: password }
+    RegisterRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username: { type: string }
+              email: { type: string, format: email }
+              password: { type: string, format: password }
+
+    RefreshTokenRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token: { type: string }
+
+    ChangePasswordRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              oldPassword: { type: string, format: password }
+              newPassword: { type: string, format: password }
+
+    ForgotPasswordRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email: { type: string, format: email }
+
+    ResetPasswordRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token: { type: string }
+              newPassword: { type: string, format: password }
+    VerifyEmailRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token: { type: string }
+              email: { type: string, format: email }
+
+    UpdateUserRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username: { type: string }
+              profilePicture: { type: string, format: url }
+              nickname: { type: string }
+              bio: { type: string }
+              address: { type: string }
+
+    OrderRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              userId: { type: integer }
+              productId: { type: integer }
+              quantity: { type: integer }
+
+    CartItemRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              userId: { type: integer }
+              productId: { type: integer }
+              quantity: { type: integer }
+
+    ProductRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name: { type: string }
+              description: { type: string }
+              price: { type: number }
+
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT Authorization header using the Bearer scheme.
+        Enter 'Bearer' [space] and then your token in the text input below.
+        Example: "Bearer 12345abcdef"
+        Name: Authorization
+        In: header

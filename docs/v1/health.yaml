@@ -1,0 +1,24 @@
+/api/v1/health/:
+  get:
+    summary: Check health of the API service
+    tags:
+      - Health
+    responses:
+      '200':
+        description: Health check successful
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuccessResponse'
+      '404':
+        description: Route not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
